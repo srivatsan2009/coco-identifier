@@ -1,3 +1,4 @@
+objects=[];
 status="";
 function preload() {
 img=loadImage("dog_cat.jpg");
@@ -14,7 +15,7 @@ document.getElementById("status").innerHTML="status:detecting image"
 function modeloaded() {
 console.log("model loaded");
 status=true;
-objectdetection.detect(img1,gotresults);
+objectdetection.detect(img,gotresults);
 } 
 
 function gotresults(error,results) {
@@ -23,22 +24,22 @@ console.log(error);
 }
 else {
 console.log(results);
+objects=results;
 }
 }
 
 function draw() {
-image(img1,0,0,640,420);
-/*fill("goldenrod");
+image(img,0,0,640,420);
+if(status!="") {
+for (i=0; i<objects.length; i++) {
+document.getElementById("status").innerHTML="status:objects detected";
+fill("red");
+percent=floor(objects[i].confidence*100);
 textSize(20);
-text("dog",40,60);
+text(objects[i].label+" "+percent+"%",objects[i].x+15,objects[i].y+15);
 noFill();
-stroke("darkred");
-rect(40,40,200,180);
-fill("green");
-textSize(20);
-text("cat",190,60);
-noFill();
-stroke("magenta");
-strokeWeight(2);
-rect(190,40,200,180);*/
+rect(objects[i].x, objects[i].y, objects[i].width ,objects[i].height);
 }
+}
+}
+
